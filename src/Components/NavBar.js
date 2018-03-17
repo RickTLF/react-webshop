@@ -27,6 +27,8 @@ export default class NavBar extends Component {
   handleNotification = service => {
     let user = service.getUser();
 
+    console.log(user)
+
     if (!(user == null)) {
       this.setState({ user: user });
     }
@@ -72,6 +74,7 @@ function DefaultNavBar(props) {
     <ul className={"navbar-nav ml-auto"}>
       <LoginNavLink service={props.service} notify={props.notify} />
       <SignUpNavLink />
+      <NavLink href={"/cart"}>Cart</NavLink>
     </ul>
   );
 }
@@ -85,8 +88,7 @@ class LoginNavLink extends Component {
     this.state = {
       email: "",
       password: "",
-      errorMessage: "",
-      hidden: false
+      errorMessage: ""
     };
   }
 
@@ -96,6 +98,9 @@ class LoginNavLink extends Component {
     let { service } = this.props;
     const { notify } = this.props;
     if (!(service == null)) {
+
+      // service.login(email, password)
+      // console.log(service)
       if (service.login(email, password)) {
         document.getElementById("dismissModal").click();
         notify(service);
