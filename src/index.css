@@ -1,5 +1,43 @@
 body {
+  width: 100%;
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+
+.card-footer,
+.card,
+.card-header,
+.dropdown-menu,
+.modal-content,
+.modal-header, .modal-footer, .btn, input, textarea, select {
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+.modal-header, .modal-body {
+  background-color: #394046 !important;
+}
+
+.alert-info {
+  border: 2px solid #117888;
+  border-radius: 0;
+}
+
+.card-img-top {
+  border: 1px solid #dee2e6;
+  border-radius: 0;
+  border-bottom: 0
+}
+
+.dropdown-menu {
+  padding: 0;
+}
+
+button {
+  border: 0;
+}
+
+#footer {
+  margin-top: 50px;
 }
