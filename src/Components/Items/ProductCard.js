@@ -10,7 +10,7 @@ export function ProductCardMin(props) {
     <div className={"card"}>
       <img className={"card-img-top"} src={logo} alt={"Card image cap"} />
       <div className={"card-body bg-dark text-light"}>
-        <h5 className={"card-title"}>Card title</h5>
+        <h5 className={"card-title"}>{props.name}</h5>
         <h4 className={'my-font'}>
           <span className={"text-info"}>&euro;{props.price}</span>
         </h4>

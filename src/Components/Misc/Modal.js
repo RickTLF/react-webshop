@@ -13,6 +13,10 @@ export function ModalLauncher(props) {
   );
 }
 
+export function toggleModal() {
+  document.getElementById("dismissModal").click();
+}
+
 export function ModalLauncherLink(props) {
   return (
     <a

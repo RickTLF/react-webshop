@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, ModalLauncher, ModalLauncherLink } from "./Misc/Modal";
+import { Modal, toggleModal, ModalLauncher, ModalLauncherLink } from "./Misc/Modal";
 import { LoginForm } from "./Forms/AccountForm";
 import AccountService from "../Services/AccountService";
 
@@ -13,32 +13,37 @@ function LoginButton(props) {
 
 // ===============================================================================
 
+// FIXME: Fix logout function
 export default class NavBar extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      service:
-        this.props.service == null ? new AccountService() : props.service,
+      service: this.props.service == null ? new AccountService() : props.service,
       user: null
     };
   }
 
   handleNotification = service => {
-    let user = service.getUser();
-
-    console.log(user)
-
-    if (!(user == null)) {
-      this.setState({ user: user });
-    }
+    console.log('Hello world!')
+    console.log(service)
+    service.getUser().then(user => {
+      this.props.notify(user);
+    });
   };
+
+  handleLogout = () => {
+    // console.log(this.props)
+    this.props.onClickLogout()
+  }
 
   render() {
     return (
       <NavBarBase>
-        {!(this.state.user == null) ? (
-          <LoggedInNavBar user={this.state.user} />
+        {!(this.props.user == null) ? (
+          <LoggedInNavBar
+          onClickLogout={this.handleLogout} 
+          user={this.props.user} />
         ) : (
           <DefaultNavBar
             service={this.state.service}
@@ -54,18 +59,19 @@ export default class NavBar extends Component {
 
 function LoggedInNavBar(props) {
   return (
-    <ul className={"navbar-nav ml-auto"}>
-      <NavDropDown user={props.user}>
-        <NavDropDownMenu>
-          <NavDropDownItem>Logout</NavDropDownItem>
-        </NavDropDownMenu>
-      </NavDropDown>
-      {!(props.user.admin == false) ? (
-        <NavLink href={"/admin"}>Admin</NavLink>
-      ) : (
-        <NavLink href={"/cart"}>Cart</NavLink>
+    <div>
+      {!(props.user == null) && (
+        <ul className={"navbar-nav ml-auto"}>
+          <NavDropDown user={props.user}>
+            <NavDropDownMenu>
+              <NavDropDownItem href={'/account'}>Account</NavDropDownItem>
+              <NavDropDownItem onClick={props.onClickLogout}>Logout</NavDropDownItem>
+            </NavDropDownMenu>
+          </NavDropDown>
+          <NavLink href={"/cart"}>Cart</NavLink>
+        </ul>
       )}
-    </ul>
+    </div>
   );
 }
 
@@ -98,11 +104,8 @@ class LoginNavLink extends Component {
     let { service } = this.props;
     const { notify } = this.props;
     if (!(service == null)) {
-
-      // service.login(email, password)
-      // console.log(service)
       if (service.login(email, password)) {
-        document.getElementById("dismissModal").click();
+        toggleModal();
         notify(service);
       }
       this.setState({ errorMessage: service.getErrorMessage() });
@@ -153,8 +156,6 @@ function SignUpNavLink(props) {
 // ===============================================================================
 
 function NavDropDown(props) {
-  console.log(props.top);
-
   return (
     <li class="nav-item dropdown">
       <a
@@ -182,7 +183,7 @@ function NavDropDownMenu(props) {
 
 function NavDropDownItem(props) {
   return (
-    <a class="dropdown-item bg-warning" href="#">
+    <a onClick={props.onClick} class="dropdown-item bg-warning" href={props.href}>
       {props.children}
     </a>
   );
